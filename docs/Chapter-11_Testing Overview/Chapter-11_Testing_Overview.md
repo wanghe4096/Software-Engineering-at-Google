@@ -101,4 +101,75 @@ The ability for humans to manually validate every behavior in a system has been 
 # Write, Run, React
 # 编写，运行，响应
 
-     
+
+In its purest form, automating testing consists of three activities: writing tests, run‐ ning tests, and reacting to test failures. An automated test is a small bit of code, usu‐ ally a single function or method, that calls into an isolated part of a larger system that you want to test. The test code sets up an expected environment, calls into the system, usually with a known input, and verifies the result. Some of the tests are very small, exercising a single code path; others are much larger and can involve entire systems, like a mobile operating system or web browser.
+在其最纯粹的形式上，自动化测试包括三种活动：编写测试，运行测试，以及对测试失败作出反应。自动化测试是一小段代码，通常是一个单一的函数或方法，调用到你要测试的大系统的一个孤立的部分。测试代码设置了一个预期的环境，调用系统，通常有一个已知的输入，并验证结果。有些测试是非常小的，行使单一的代码路径；有些则大得多，可以涉及整个系统，如移动操作系统或网络浏览器。
+Example 11-1 presents a deliberately simple test in Java using no frameworks or test‐ ing libraries. This is not how you would write an entire test suite, but at its core every automated test looks similar to this very simple example.
+例11-1介绍了一个特意用Java编写的简单测试，没有使用框架或测试库。这不是你编写整个测试套件的方式，但每个自动化测试的核心都与这个非常简单的例子相似。
+
+Example 11-1. An example test
+```java
+// Verifies a Calculator class can handle negative results.
+public void main(String[] args) {
+Calculator calculator = new Calculator();
+int expectedResult = -3;
+int actualResult = calculator.subtract(2, 5); // Given 2, Subtracts 5. assert(expectedResult == actualResult);
+}
+```
+
+Unlike the QA processes of yore, in which rooms of dedicated software testers pored over new versions of a system, exercising every possible behavior, the engineers who build systems today play an active and integral role in writing and running automated tests for their own code. Even in companies where QA is a prominent organization, developer-written tests are commonplace. At the speed and scale that today’s systems are being developed, the only way to keep up is by sharing the development of tests around the entire engineering staff.
+与过去的QA过程不同的是，在过去的QA过程中，由专门的软件测试人员组成的房间对系统的新版本进行研究，对每一个可能的行为进行测试，今天构建系统的工程师在为他们自己的代码编写和运行自动测试方面发挥着积极和不可或缺的作用。即使在QA是一个重要组织的公司，开发人员编写的测试也是很常见的。在当今系统开发的速度和规模下，跟上的唯一方法是在整个工程人员中分享测试的开发。
+
+
+Of course, writing tests is different from writing good tests. It can be quite difficult to train tens of thousands of engineers to write good tests. We will discuss what we have learned about writing good tests in the chapters that follow.
+当然，写测试和写好测试是不同的。要训练数以万计的工程师写出好的测试是相当困难的。我们将在后面的章节中讨论我们所学到的关于写好测试的知识。
+
+
+Writing tests is only the first step in the process of automated testing. After you have written tests, you need to run them. Frequently. At its core, automated testing con‐ sists of repeating the same action over and over, only requiring human attention when something breaks. We will discuss this Continuous Integration (CI) and testing in Chapter 23. By expressing tests as code instead of a manual series of steps, we can run them every time the code changes—easily thousands of times per day. Unlike human testers, machines never grow tired or bored.
+编写测试只是自动化测试过程中的第一步。在你写完测试后，你需要运行它们。经常如此。自动化测试的核心是重复相同的动作，只有在出现问题时才需要人工关注。我们将在第23章讨论这个持续集成（CI）和测试。通过将测试表达为代码，而不是手动的一系列步骤，我们可以在每次代码修改时运行它们--每天很容易地运行数千次。与人类测试人员不同，机器永远不会疲倦或厌倦。
+
+
+Another benefit of having tests expressed as code is that it is easy to modularize them for execution in various environments. Testing the behavior of Gmail in Firefox requires no more effort than doing so in Chrome, provided you have configurations for both of these systems.3 Running tests for a user interface (UI) in Japanese or Ger‐ man can be done using the same test code as for English.
+
+将测试表达为代码的另一个好处是，很容易将其模块化，以便在不同的环境中执行。在Firefox中测试Gmail的行为并不需要比在Chrome中测试需要付出更多的努力，只要你有这两个系统的配置就可以了。
+
+
+Products and services under active development will inevitably experience test fail‐ ures. What really makes a testing process effective is how it addresses test failures. Allowing failing tests to pile up quickly defeats any value they were providing, so it is imperative not to let that happen. Teams that prioritize fixing a broken test within minutes of a failure are able to keep confidence high and failure isolation fast, and therefore derive more value out of their tests.
+正在开发的产品和服务不可避免地会出现测试失败。真正使测试过程有效的是它如何解决测试失败。允许失败的测试堆积在一起，很快就会破坏他们提供的任何价值，所以一定不要让这种情况发生。在失败后的几分钟内优先修复破损的测试的团队能够保持较高的信心和快速的故障隔离，因此从他们的测试中获得更多的价值。
+
+In summary, a healthy automated testing culture encourages everyone to share the work of writing tests. Such a culture also ensures that tests are run regularly. Last, and perhaps most important, it places an emphasis on fixing broken tests quickly so as to maintain high confidence in the process.
+
+总之，一个健康的自动化测试文化鼓励每个人分享编写测试的工作。这样的文化也确保了测试的定期运行。最后，也许是最重要的，它强调快速修复破损的测试，以便在这个过程中保持高信心。
+
+
+# Benefits of Testing Code
+# 测试代码的收益
+To developers coming from organizations that don’t have a strong testing culture, the idea of writing tests as a means of improving productivity and velocity might seem antithetical. After all, the act of writing tests can take just as long (if not longer!) than implementing a feature would take in the first place. On the contrary, at Google, we’ve found that investing in software tests provides several key benefits to developer productivity:
+对于来自没有强大测试文化的组织的开发人员来说，编写测试作为提高生产力和速度的一种手段的想法似乎是对立的。 毕竟，编写测试所需的时间（如果不是更长的话！）与实现一个特性所需的时间一样长。 相反，在 Google，我们发现投资于软件测试为开发人员的生产力提供了几个关键的好处：
+> Less debugging
+> 更少的调试
+As you would expect, tested code has fewer defects when it is submitted. Critically, it also has fewer defects throughout its existence; most of them will be caught before the code is submitted. A piece of code at Google is expected to be modified dozens of times in its lifetime. It will be changed by other teams and even automated code maintenance systems. A test written once continues to pay dividends and prevent costly defects and annoying debugging sessions through the lifetime of the project. Changes to a project, or the dependencies of a project, that break a test can be quickly detected by test infrastructure and rolled back before the problem is ever released to production.
+如您所料，经过测试的代码在提交时缺陷较少。至关重要的是，bug会在整个测试存在过程中的缺陷也更少；大部分会在提交代码之前被捕获。谷歌的一段代码在其生命周期中预计会被修改数十次。它会被其他团队甚至自动化代码维护系统更改。编写一次的测试将持续带来收益，并在项目的整个生命周期内防止代价高昂的缺陷和烦人的调试过程。测试基础设施可以快速检测到破坏测试的项目或项目依赖项的更改，并在问题发布到生产之前回滚。
+
+> Increased confidence in changes
+All software changes. Teams with good tests can review and accept changes to their project with confidence because all important behaviors of their project are continuously verified. Such projects encourage refactoring. Changes that refactor code while preserving existing behavior should (ideally) require no changes to existing tests.
+增强对代码修改的信心
+所有软件都发生了变化。具有良好测试的团队可以自信地审查和接受对其项目的更改，因为他们项目的所有重要行为都会得到持续验证。此类项目鼓励重构。在保留现有行为的同时重构代码的更改（理想情况下）应该不需要更改现有测试。
+
+> Improved documentation
+> 改进的文档
+
+Software documentation is notoriously unreliable. From outdated requirements to missing edge cases, it is common for documentation to have a tenuous rela‐ tionship to the code. Clear, focused tests that exercise one behavior at a time function as executable documentation. If you want to know what the code does in a particular case, look at the test for that case. Even better, when requirements change and new code breaks an existing test, we get a clear signal that the “docu‐ mentation” is now out of date. Note that tests work best as documentation only if care is taken to keep them clear and concise.
+
+众所周知，软件文档不可靠。从过期的需求到缺少边界情况，文档与代码之间的关系很脆弱是很常见的。清晰的、有针对性的测试，一次行使一个行为的功能是可执行的文档。如果您想知道代码在特定情况下的作用，请查看该情况下的测试。更好的是，当需求发生变化并且新代码破坏了现有测试时，我们会得到一个明确的信号，即“文档”现在已经过时了。请注意，只有在注意保持其清晰简洁的情况下，测试才最适合作为文档。
+> 译者评： 测试即文档， 比文档更具有可执行性和实时性。 不会像文档那样有过期或边界模糊的情况。 
+> Simpler reviews
+> 更简单的审查
+All code at Google is reviewed by at least one other engineer before it can be sub‐ mitted (see Chapter 9 for more details). A code reviewer spends less effort verify‐ ing code works as expected if the code review includes thorough tests that demonstrate code correctness, edge cases, and error conditions. Instead of the tedious effort needed to mentally walk each case through the code, the reviewer can verify that each case has a passing test.
+在谷歌，所有的代码在提交前都要经过至少一名其他工程师的审查（详见第九章）。如果代码审查包括完整的测试，以证明代码的正确性、边界和错误条件，那么代码审查员就会花更少的精力来验证代码是否符合预期。审查员可以验证每个案例都有一个合格的测试，而不是在头脑中走一遍代码所需的繁琐的努力。
+> Thoughtful design
+Writing tests for new code is a practical means of exercising the API design of the code itself. If new code is difficult to test, it is often because the code being tested has too many responsibilities or difficult-to-manage dependencies. Well- designed code should be modular, avoiding tight coupling and focusing on spe‐ cific responsibilities. Fixing design issues early often means less rework later.
+
+> Fast, high-quality releases
+# 快速，高质量的发布
+With a healthy automated test suite, teams can release new versions of their application with confidence. Many projects at Google release a new version to production every day—even large projects with hundreds of engineers and thou‐ sands of code changes submitted every day. This would not be possible without automated testing.
